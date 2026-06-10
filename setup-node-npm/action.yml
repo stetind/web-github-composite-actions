@@ -1,22 +1,27 @@
-name: 'Setup Node & NPM'
-description: 'GitHub action that sets the node environment for a workflow and downloads NPM dependencies.'
+name: 'Setup Node & pnpm'
+description: 'GitHub action that sets the node environment for a workflow and downloads pnpm dependencies.'
 inputs:
   node_version:
     description: 'Node version'
     required: false
-    default: '20'
+    default: '24'
 
 runs:
   using: 'composite'
   steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
-        # cache: npm
-        # cache-dependency-path: package-lock.json
+        cache: pnpm
+        cache-dependency-path: pnpm-lock.yaml
 
-    - name: Npm Install
-      run: npm ci --ignore-scripts
+    - name: pnpm Install
+      run: pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
