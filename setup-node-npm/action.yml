@@ -14,13 +14,13 @@ runs:
   using: 'composite'
   steps:
     - name: Setup pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
       with:
         version: ${{ inputs.pnpm_version }}
         run_install: false
 
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
@@ -28,5 +28,5 @@ runs:
         cache-dependency-path: pnpm-lock.yaml
 
     - name: pnpm Install
-      run: pnpm install --frozen-lockfile --ignore-scripts
+      run: pnpm install --frozen-lockfile --ignore-scripts --ignore-supply-chain-policies
       shell: bash
